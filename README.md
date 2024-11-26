@@ -10,7 +10,7 @@ El objetivo de este trabajo es implementar una aplicación de FreeRTOS sobre un 
 
 - Una tarea que se encargue de graficar en el tiempo los valores de la salida del filtro.
 
-- Una tarea tipo Top de linux que muestre información de las tareas (%CPU, Stack, ticks, etc).
+- Una tarea tipo Top de Linux que muestre información de las tareas (%CPU, Stack, ticks, etc).
 
 - Para cada tarea se debe calcular el stack size necesario.
 
@@ -27,7 +27,7 @@ Para poder implementar esta aplicación se necesita:
      sudo apt install gcc-arm-none-eabi
      ```
 
-Para buildear el proyecto y correr la aplicación en el emulador se puede correr el scrip [run.sh](./run.sh) que se encuentra en la carpeta raíz del proyecto. (Recordar darle permisos de ejecución con `chmod +x run.sh`)
+Para buildear el proyecto y correr la aplicación en el emulador se puede correr el script [run.sh](./run.sh) que se encuentra en la carpeta raíz del proyecto. (Recordar darle permisos de ejecución con `chmod +x run.sh`)
 
 ```bash
 sudo ./run.sh
@@ -64,9 +64,9 @@ Una vez calculado el promedio, se envía el valor a través de la Queue `xGraphQ
 
 ### vGraphTask
 
-La tarea de graficación es la más complicada, ya que el display del sistema cuenta con una dimensión de 85 columnas por 2 filas. Entonces para graficar los valores de temperatura, los cuales se representan como puntos, se debe usar una lógica en la que usando la función `OSRAMImageDraw` se envían cadenas de bytes en Octal que representan los puntos en la pantalla.
+La tarea de display es la más complicada, ya que el display del sistema cuenta con una dimensión de 85 columnas por 2 filas. Entonces para graficar los valores de temperatura, los cuales se representan como puntos, se debe usar una lógica en la que usando la función `OSRAMImageDraw` se envían cadenas de bytes en Octal que representan los puntos en la pantalla.
 
-Para inciar el LCD se usa la función `OSRAMInit()`, una vez iniciada se hace uso de las funciones `OSRAMImageDraw()` y `OSRAMStringDraw()` para graficar los puntos, los ejes y el valor actual de N.
+Para iniciar el LCD se usa la función `OSRAMInit()`, una vez iniciada se hace uso de las funciones `OSRAMImageDraw()` y `OSRAMStringDraw()` para graficar los puntos, los ejes y el valor actual de N.
 
 A la función `OSRAMImageDraw()` se le pasa un puntero a un array de bytes que representa la imagen a dibujar, la posición en x e y donde se va a dibujar y el ancho y alto de la imagen.
 
@@ -78,7 +78,7 @@ void OSRAMImageDraw(const unsigned char *pucImage,
                     unsigned long ulHeight)
 ```
 
-Como se mencionó la lógica es a través de octales, cada uno de estos es un Byte que se grafica "transpuesto" y representa una columna, donde el bit más significativo representa la parte de abajo de la columna y el menos significativo la parte de arriba. Por ejemplo para dibujar el número 0 con tres columnas, se haría de la sigueinte manera:
+Como se mencionó la lógica es a través de octales, cada uno de estos es un Byte que se grafica "transpuesto" y representa una columna, donde el bit más significativo representa la parte de abajo de la columna y el menos significativo la parte de arriba. Por ejemplo para dibujar el número 0 con tres columnas, se haría de la siguiente manera:
 
 ```bash
 1 1 1
@@ -101,7 +101,7 @@ Así, siguiendo esta lógica se hace un mapeo de los valores y los octales corre
 
 Para poder cambiar el valor de N, se configuró el UART0 para generar una interrupción cuando recibe un dato, cuando esto pasa, en la ISR correspondiente, se envía el valor mediante la Queue `xUARTQueue` a esta tarea, la cual se encarga de procesar el caracter recibido y cambiar el valor de `current_n` si el caracter es un número.
 
-Se implemetó la lógica con un buffer que almacena dígitos hasta que se recibe el caracter correspondiente al enter, entonces se convierte el contenido del buffer a un número y este valor se asigna a `current_n`. Si el valor ingresado es superior al tamaño del buffer, `current_n` se setea en este máximo tamaño.
+Se implementó la lógica con un buffer que almacena dígitos hasta que se recibe el caracter correspondiente al enter, entonces se convierte el contenido del buffer a un número y este valor se asigna a `current_n`. Si el valor ingresado es superior al tamaño del buffer, `current_n` se setea en este máximo tamaño.
 
 ### vMonitorTask
 
@@ -115,7 +115,7 @@ Estos fueron algunos de los valores obtenidos partiendo con un stack size de 160
 
 ![stack_size](./img/stack_size_measurement.png)
 
-Tomando un promedio para cada tarea, restando este a los 160 iniciales y sumandole un valor más alto para considerar situaciones de mayor uso, se asignaron los siguientes valores:
+Tomando un promedio para cada tarea, restando este a los 160 iniciales y sumándole un valor más alto para considerar situaciones de mayor uso, se asignaron los siguientes valores:
 
 - __vTemperatureSensorTask__: $160 - 123 = 37 \Rightarrow 55$
 
