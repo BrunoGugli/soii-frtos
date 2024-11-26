@@ -1,5 +1,7 @@
 # TP N° 4 - Sistemas Operativos II - FreeRTOS
 
+[[TOC]]
+
 ## Objetivo
 
 El objetivo de este trabajo es implementar una aplicación de FreeRTOS sobre un sistema __Stellaris LM3S811__ (emulada con __QEMU__) que debe contar con las siguientes tareas:
