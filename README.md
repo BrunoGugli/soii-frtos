@@ -1,6 +1,15 @@
 # TP N° 4 - Sistemas Operativos II - FreeRTOS
 
-[[TOC]]
+- [TP N° 4 - Sistemas Operativos II - FreeRTOS](#tp-n-4---sistemas-operativos-ii---freertos)
+  - [Objetivo](#objetivo)
+  - [Requerimientos](#requerimientos)
+  - [Desarrollo](#desarrollo)
+    - [vTemperatureSensorTask](#vtemperaturesensortask)
+    - [vFilterTask](#vfiltertask)
+    - [vGraphTask](#vgraphtask)
+    - [vReceiveCharTask](#vreceivechartask)
+    - [vMonitorTask](#vmonitortask)
+    - [vTopTask](#vtoptask)
 
 ## Objetivo
 
